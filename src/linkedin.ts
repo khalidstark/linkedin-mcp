@@ -3,13 +3,16 @@ import { getBrowser, saveSession } from "./browser.js";
 
 export async function linkedinLogin(): Promise<string> {
   const { page } = await getBrowser();
-  await page.goto("https://www.linkedin.com/login");
+  try {
+    await page.goto("https://www.linkedin.com/login");
 
-  // Wait for user to manually log in (up to 3 minutes)
-  await page.waitForURL("**/feed**", { timeout: 180000 });
-  await saveSession();
-  await page.close();
-  return "Logged in successfully. Session saved.";
+    // Wait for user to manually log in (up to 3 minutes)
+    await page.waitForURL("**/feed**", { timeout: 180000 });
+    await saveSession();
+    return "Logged in successfully. Session saved.";
+  } finally {
+    await page.close();
+  }
 }
 
 export async function linkedinGetProfile(): Promise<string> {
