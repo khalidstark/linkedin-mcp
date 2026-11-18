@@ -1,4 +1,5 @@
 import { chromium, Browser, BrowserContext, Page } from "playwright";
+import fs from "fs";
 import path from "path";
 import os from "os";
 
@@ -16,7 +17,7 @@ export async function getBrowser(): Promise<{ context: BrowserContext; page: Pag
 
   if (!context) {
     context = await browser.newContext({
-      storageState: await loadSession(),
+      storageState: loadSession(),
       userAgent:
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       viewport: { width: 1280, height: 800 },
@@ -27,8 +28,7 @@ export async function getBrowser(): Promise<{ context: BrowserContext; page: Pag
   return { context, page };
 }
 
-async function loadSession(): Promise<string | undefined> {
-  const fs = await import("fs");
+function loadSession(): string | undefined {
   const sessionFile = path.join(SESSION_DIR, "state.json");
   if (fs.existsSync(sessionFile)) {
     return sessionFile;
@@ -38,7 +38,6 @@ async function loadSession(): Promise<string | undefined> {
 
 export async function saveSession(): Promise<void> {
   if (!context) return;
-  const fs = await import("fs");
   if (!fs.existsSync(SESSION_DIR)) {
     fs.mkdirSync(SESSION_DIR, { recursive: true });
   }
