@@ -10,6 +10,8 @@ let context: BrowserContext | null = null;
 
 export async function getBrowser(): Promise<{ context: BrowserContext; page: Page }> {
   if (!browser || !browser.isConnected()) {
+    // A previous context belongs to the old (closed) browser, so drop it.
+    context = null;
     browser = await chromium.launch({
       headless: false, // visible so user can log in manually
     });
