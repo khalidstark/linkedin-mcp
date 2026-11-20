@@ -11,6 +11,7 @@ import {
   linkedinCreateTextPost,
   linkedinCreateImagePost,
 } from "./linkedin.js";
+import { closeBrowser } from "./browser.js";
 
 const server = new McpServer({
   name: "linkedin-mcp",
@@ -106,6 +107,15 @@ async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error("LinkedIn MCP server running on stdio");
+}
+
+for (const signal of ["SIGINT", "SIGTERM"] as const) {
+  process.on(signal, () => {
+    // Close the Playwright browser so no Chromium process is left behind.
+    closeBrowser()
+      .catch(console.error)
+      .finally(() => process.exit(0));
+  });
 }
 
 main().catch(console.error);
