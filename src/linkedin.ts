@@ -1,3 +1,4 @@
+import fs from "fs";
 import { Page } from "playwright";
 import { getBrowser, saveSession } from "./browser.js";
 
@@ -192,6 +193,9 @@ export async function linkedinCreateTextPost(text: string): Promise<string> {
 }
 
 export async function linkedinCreateImagePost(text: string, imagePath: string): Promise<string> {
+  if (!fs.existsSync(imagePath)) {
+    throw new Error(`Image file not found: ${imagePath}`);
+  }
   const { page } = await getBrowser();
   try {
     await page.goto("https://www.linkedin.com/feed/", { waitUntil: "domcontentloaded" });
