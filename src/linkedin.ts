@@ -108,6 +108,9 @@ export async function linkedinAddCertification(cert: {
   credentialId?: string;
   credentialUrl?: string;
 }): Promise<string> {
+  if (cert.issueDate && !/^\d{1,2}\/\d{4}$/.test(cert.issueDate)) {
+    throw new Error(`Invalid issueDate "${cert.issueDate}": expected MM/YYYY`);
+  }
   const { page } = await getBrowser();
   try {
     await page.goto("https://www.linkedin.com/in/me/details/certifications/", {
