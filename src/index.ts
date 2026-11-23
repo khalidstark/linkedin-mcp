@@ -118,4 +118,7 @@ for (const signal of ["SIGINT", "SIGTERM"] as const) {
   });
 }
 
-main().catch(console.error);
+main().catch((err) => {
+  console.error("Failed to start LinkedIn MCP server:", err);
+  process.exit(1);
+});
