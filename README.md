@@ -144,7 +144,7 @@ Image paths must be absolute — relative paths won't resolve correctly inside t
 
 ## Session Management
 
-Login sessions are stored in `~/.linkedin-mcp-session/state.json` (cookies + local storage). This file is **not** committed to the repo and is ignored by `.gitignore`. If your session expires, just call `linkedin_login` again to refresh it.
+Login sessions are stored in `~/.linkedin-mcp-session/state.json` (cookies + local storage). This file lives in your home directory, outside the repo, so it is never committed. If your session expires, just call `linkedin_login` again to refresh it.
 
 To force a fresh login at any time, delete the session directory:
 
