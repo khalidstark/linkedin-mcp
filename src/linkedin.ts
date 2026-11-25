@@ -196,7 +196,7 @@ export async function linkedinCreateTextPost(text: string): Promise<string> {
 }
 
 export async function linkedinCreateImagePost(text: string, imagePath: string): Promise<string> {
-  if (!fs.existsSync(imagePath)) {
+  if (!fs.existsSync(imagePath) || !fs.statSync(imagePath).isFile()) {
     throw new Error(`Image file not found: ${imagePath}`);
   }
   const { page } = await getBrowser();
