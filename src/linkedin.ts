@@ -2,6 +2,12 @@ import fs from "fs";
 import { Page } from "playwright";
 import { getBrowser, saveSession } from "./browser.js";
 
+function requireText(value: string, label: string): void {
+  if (!value.trim()) {
+    throw new Error(`${label} must not be empty`);
+  }
+}
+
 export async function linkedinLogin(): Promise<string> {
   const { page } = await getBrowser();
   try {
@@ -48,6 +54,7 @@ export async function linkedinGetProfile(): Promise<string> {
 }
 
 export async function linkedinUpdateSummary(summary: string): Promise<string> {
+  requireText(summary, "Summary");
   const { page } = await getBrowser();
   try {
     await page.goto("https://www.linkedin.com/in/me/", { waitUntil: "domcontentloaded" });
@@ -73,6 +80,7 @@ export async function linkedinUpdateSummary(summary: string): Promise<string> {
 }
 
 export async function linkedinAddSkill(skill: string): Promise<string> {
+  requireText(skill, "Skill");
   const { page } = await getBrowser();
   try {
     await page.goto("https://www.linkedin.com/in/me/details/skills/", {
@@ -148,6 +156,7 @@ export async function linkedinAddCertification(cert: {
 }
 
 export async function linkedinUpdateHeadline(headline: string): Promise<string> {
+  requireText(headline, "Headline");
   const { page } = await getBrowser();
   try {
     await page.goto("https://www.linkedin.com/in/me/", { waitUntil: "domcontentloaded" });
@@ -170,6 +179,7 @@ export async function linkedinUpdateHeadline(headline: string): Promise<string> 
 }
 
 export async function linkedinCreateTextPost(text: string): Promise<string> {
+  requireText(text, "Post text");
   const { page } = await getBrowser();
   try {
     await page.goto("https://www.linkedin.com/feed/", { waitUntil: "domcontentloaded" });
@@ -196,6 +206,7 @@ export async function linkedinCreateTextPost(text: string): Promise<string> {
 }
 
 export async function linkedinCreateImagePost(text: string, imagePath: string): Promise<string> {
+  requireText(text, "Post text");
   if (!fs.existsSync(imagePath) || !fs.statSync(imagePath).isFile()) {
     throw new Error(`Image file not found: ${imagePath}`);
   }
