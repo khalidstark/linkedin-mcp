@@ -116,6 +116,8 @@ export async function linkedinAddCertification(cert: {
   credentialId?: string;
   credentialUrl?: string;
 }): Promise<string> {
+  requireText(cert.name, "Certification name");
+  requireText(cert.issuer, "Issuer");
   if (cert.issueDate && !/^(0?[1-9]|1[0-2])\/\d{4}$/.test(cert.issueDate)) {
     throw new Error(`Invalid issueDate "${cert.issueDate}": expected MM/YYYY`);
   }
